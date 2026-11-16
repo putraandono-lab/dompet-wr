@@ -502,4 +502,6 @@
     S.screen = 'login'; render();
   }
   boot();
+  var sp = document.getElementById('splash');
+  if (sp) setTimeout(function () { sp.classList.add('out'); setTimeout(function () { sp.remove(); }, 450); }, Math.max(0, 1500 - performance.now()));
 })();
