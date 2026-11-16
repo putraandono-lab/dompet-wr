@@ -121,3 +121,6 @@ input[type=date].field::-webkit-calendar-picker-indicator{margin-left:auto}
 @keyframes spPop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 @keyframes spUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes spBlink{0%,100%{opacity:.25}50%{opacity:1}}
+.pad button{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.pad button[data-key=del]{background:var(--field);box-shadow:none;color:var(--ink);display:grid;place-items:center}
+.pad button[data-key=del] svg{width:32px;height:32px;pointer-events:none}

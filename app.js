@@ -173,7 +173,7 @@
   function keypad(extraLeft) {
     var h = '<div class="pad">';
     for (var i = 1; i <= 9; i++) h += '<button data-key="' + i + '">' + i + '</button>';
-    h += (extraLeft || '<button class="ghost" disabled></button>') + '<button data-key="0">0</button><button class="ghost" data-key="del" aria-label="Hapus">⌫</button></div>';
+    h += (extraLeft || '<button class="ghost" disabled></button>') + '<button data-key="0">0</button><button class="ghost" data-key="del" aria-label="Hapus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h11a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H9l-6-7z"/><path d="M12 9.5l5 5M17 9.5l-5 5"/></svg></button></div>';
     return h;
   }
   function vPinSetup() {
