@@ -84,9 +84,9 @@
   }
   function paintSync() {
     var el = document.querySelectorAll('.sync'); if (!el.length) return;
-    var txt = !navigator.onLine ? 'Offline' : S.syncing ? 'Menyinkron…' : S.syncErr ? 'Gagal sinkron' : S.queue.length ? S.queue.length + ' menunggu' : 'Tersinkron';
+    var txt = !navigator.onLine ? 'Offline' : S.syncing ? 'Menyinkron…' : S.syncErr ? 'Gagal sinkron' : S.queue.length ? S.queue.length + ' menunggu' : '';
     var cls = !navigator.onLine ? 'off' : S.syncErr ? 'err' : '';
-    el.forEach(function (e) { e.className = 'sync ' + cls; e.innerHTML = '<b></b>' + txt; });
+    el.forEach(function (e) { e.className = 'sync ' + cls; e.innerHTML = '<b></b>' + txt; e.title = txt || 'Tersinkron'; });
   }
 
   /* ---------- crypto: PIN & biometrik ---------- */
