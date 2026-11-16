@@ -127,6 +127,26 @@
   function wmap() { var m = {}; (S.D.dompet || []).forEach(function (w) { m[w.id] = w; }); return m; }
   function wpal(w) { return PAL[(w && w.warna)] || PAL.abu; }
   function wicon(w, size) { var p = wpal(w); return '<span class="wi" style="background:' + p.t + ';color:' + p.x + (size ? ';width:' + size + 'px;height:' + size + 'px' : '') + '">' + esc((w && w.huruf) || '?') + '</span>'; }
+  var KI = {
+    Makan: ['M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 21V3c-2 1-4 4-4 8h4', 'emas'],
+    Transport: ['M5 17h14M6 17V9l2-4h8l2 4v8M6 12h12M8 17v2M16 17v2', 'biru'],
+    Tagihan: ['M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6', 'burgundy'],
+    Belanja: ['M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2', 'ungu'],
+    Hiburan: ['M4 5h16v14H4zM4 9h16M8 5v4M16 5v4M10 13l4 2-4 2z', 'teal'],
+    Online: ['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18', 'biru'],
+    QRIS: ['M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2M14 18h2v2M18 18h2v2', 'abu'],
+    Gaji: ['M3 7h18v12H3zM3 7l2-3h14l2 3M15 13h2', 'hijau'],
+    Bonus: ['M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z', 'emas'],
+    Usaha: ['M4 9l1-5h14l1 5M4 9a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 6 0 2.5 2.5 0 0 0 5 0M5 11v9h14v-9M10 20v-5h4v5', 'teal'],
+    Hadiah: ['M4 8h16v4H4zM6 12v8h12v-8M12 8v12M12 8c-3 0-4-4-1-4 2 0 1 4 1 4zM12 8c3 0 4-4 1-4-2 0-1 4-1 4z', 'burgundy'],
+    Investasi: ['M3 17l6-6 4 4 8-8M15 7h6v6', 'hijau'],
+    Lainnya: ['M6 12h.01M12 12h.01M18 12h.01', 'abu'],
+    _transfer: ['M4 8h14l-3-3M20 16H6l3 3', 'abu']
+  };
+  function catIcon(k, size) {
+    var d = KI[k] || KI.Lainnya, p = PAL[d[1]], sz = size || 32;
+    return '<span class="wi" style="background:' + p.t + ';color:' + p.x + ';width:' + sz + 'px;height:' + sz + 'px"><svg viewBox="0 0 24 24" width="' + Math.round(sz * .6) + '" height="' + Math.round(sz * .6) + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="' + d[0] + '"/></svg></span>';
+  }
   function curPeriod(off) { var rd = C.clampDay(S.D.pengaturan.resetDay); var p = C.periodOf(C.today(), rd); return off ? C.shiftPeriod(p, off, rd) : p; }
   function calc(off) {
     var D = S.D, rd = C.clampDay(D.pengaturan.resetDay), p = curPeriod(off), prev = C.shiftPeriod(p, -1, rd);
@@ -204,13 +224,13 @@
     return rows.map(function (r) {
       var cl = r.status === 'over' ? 'over' : r.status === 'warn' ? 'amb' : 'mut';
       var msg = r.status === 'over' ? 'Lebih ' + C.fmtRp(r.used - r.limit) : r.status === 'warn' ? 'Hampir habis, sisa ' + C.fmtRp(r.sisa) : 'Sisa ' + C.fmtRp(r.sisa);
-      return '<div class="bud"><div class="hd"><b>' + esc(r.kategori) + '</b><span class="num">' + C.fmtRp(r.used) + ' <span class="mut">/ ' + C.fmtRp(r.limit) + '</span></span></div>' + barHtml(r, wm) + '<div class="alert ' + cl + '">' + msg + ' · ' + r.pct + '%</div></div>';
+      return '<div class="bud"><div class="hd"><b style="display:flex;align-items:center;gap:8px">' + catIcon(r.kategori, 24) + esc(r.kategori) + '</b><span class="num">' + C.fmtRp(r.used) + ' <span class="mut">/ ' + C.fmtRp(r.limit) + '</span></span></div>' + barHtml(r, wm) + '<div class="alert ' + cl + '">' + msg + ' · ' + r.pct + '%</div></div>';
     }).join('');
   }
   function liHtml(t, wm, open) {
     var w = wm[t.dompet] || {}, tw = wm[t.tujuan] || {}, sign = t.jenis === 'masuk' ? '+' : t.jenis === 'keluar' ? '−' : '';
     var title = t.jenis === 'transfer' ? 'Transfer ke ' + esc(tw.nama || t.tujuan) : esc(t.kategori || '-');
-    var h = '<div class="li" data-act="open" data-id="' + esc(t.id) + '">' + wicon(w) + '<div class="m"><b>' + title + '</b><small>' + esc(w.nama || t.dompet) + (t.catatan ? ' · ' + esc(t.catatan) : '') + (t.pending ? ' <span class="pend">• menunggu sinkron</span>' : '') + '</small></div><div class="a num ' + (t.jenis === 'masuk' ? 'inc' : '') + '">' + sign + C.fmtRp(t.nominal).replace('−', '') + '</div></div>';
+    var h = '<div class="li" data-act="open" data-id="' + esc(t.id) + '">' + catIcon(t.jenis === 'transfer' ? '_transfer' : t.kategori) + '<div class="m"><b>' + title + '</b><small>' + esc(w.nama || t.dompet) + (t.catatan ? ' · ' + esc(t.catatan) : '') + (t.pending ? ' <span class="pend">• menunggu sinkron</span>' : '') + '</small></div><div class="a num ' + (t.jenis === 'masuk' ? 'inc' : '') + '">' + sign + C.fmtRp(t.nominal).replace('−', '') + '</div></div>';
     if (open) h += '<div class="xp"><span>' + fmtDate(t.tanggal) + ' · dicatat ' + esc(t.oleh || '-') + '</span><button class="btn sm danger" data-act="del" data-id="' + esc(t.id) + '">Hapus</button></div>';
     return h;
   }
@@ -254,7 +274,7 @@
     var D = S.D, wm = wmap(), c = calc(S.pOff), tr = C.trend(D.transaksi, c.rd, c.p, 12);
     var kats = Object.keys(c.sum.kat).sort(function (a, b) { return c.sum.kat[b].total - c.sum.kat[a].total; });
     var pd = D.dompet.map(function (w) { var s = c.sum.perDompet[w.id] || { masuk: 0, keluar: 0 }; return '<tr><td>' + esc(w.nama) + '</td><td class="r num inc">' + C.fmtRp(s.masuk) + '</td><td class="r num">' + C.fmtRp(s.keluar) + '</td><td class="r num">' + C.fmtRp(s.masuk - s.keluar) + '</td></tr>'; }).join('');
-    var kt = kats.map(function (k) { return '<tr><td>' + esc(k) + '</td><td class="r num">' + C.fmtRp(c.sum.kat[k].total) + '</td><td class="r num mut">' + (c.sum.keluar ? Math.round(c.sum.kat[k].total / c.sum.keluar * 100) : 0) + '%</td></tr>'; }).join('');
+    var kt = kats.map(function (k) { return '<tr><td><span style="display:inline-flex;align-items:center;gap:8px">' + catIcon(k, 24) + esc(k) + '</span></td><td class="r num">' + C.fmtRp(c.sum.kat[k].total) + '</td><td class="r num mut">' + (c.sum.keluar ? Math.round(c.sum.kat[k].total / c.sum.keluar * 100) : 0) + '%</td></tr>'; }).join('');
     var net = c.sum.masuk - c.sum.keluar;
     return '<div class="page wide"><div class="pnav noprint"><button class="iconbtn" data-act="pprev" aria-label="Sebelumnya">' + ICON.back + '</button><b>' + esc(c.p.label) + '</b><button class="iconbtn" data-act="pnext" ' + (S.pOff >= 0 ? 'disabled style="opacity:.4"' : '') + ' aria-label="Berikutnya" style="transform:scaleX(-1)">' + ICON.back + '</button></div>' +
       '<h2 style="display:none" class="printh">Laporan Dompet WR · ' + esc(c.p.label) + '</h2>' +
@@ -294,7 +314,7 @@
       '<div class="lab">' + (F.jenis === 'transfer' ? 'Dari dompet' : 'Dompet') + '</div>' + wsel('dompet', F.dompet);
     if (F.jenis === 'transfer') h += '<div class="lab">Ke dompet</div>' + wsel('tujuan', F.tujuan, F.dompet);
     else {
-      h += '<div class="lab">Kategori</div><div class="cats">' + cats.map(function (k) { return '<button class="chip ' + (F.kategori === k ? 'on' : '') + '" data-act="fset" data-k="kategori" data-v="' + k + '">' + k + '</button>'; }).join('') + '</div>';
+      h += '<div class="lab">Kategori</div><div class="cats">' + cats.map(function (k) { return '<button class="chip ' + (F.kategori === k ? 'on' : '') + '" data-act="fset" data-k="kategori" data-v="' + k + '">' + catIcon(k, 20) + k + '</button>'; }).join('') + '</div>';
       if (F.jenis === 'keluar') {
         var row = calc(0).rows.filter(function (r) { return r.kategori === F.kategori; })[0];
         if (row) { var nom = C.parseNum(F.nominal); var after = row.sisa - nom; h += '<div class="alert ' + (after < 0 ? 'over' : 'mut') + '" style="margin-top:10px">Anggaran ' + esc(F.kategori) + ': sisa ' + C.fmtRp(row.sisa) + (nom ? ' → ' + C.fmtRp(after) + ' setelah ini' : '') + '</div>'; }

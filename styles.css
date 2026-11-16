@@ -102,3 +102,5 @@ input[type=date].field::-webkit-calendar-picker-indicator{margin-left:auto}
 @media print{
  body{background:#fff}.side,.tabbar,.top,.noprint,.toast{display:none!important}.shell.desk{display:block;padding:0}.main{padding:0}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}.lap{display:block}.lap .card{margin-bottom:12px}
 }
+
+.chip:has(.wi){display:inline-flex;align-items:center;gap:6px}.chip .wi{border-radius:7px}
