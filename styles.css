@@ -15,6 +15,10 @@ h1,h2,h3{margin:0}
 .btn[disabled]{opacity:.5}
 .field{width:100%;height:50px;border-radius:14px;border:1.5px solid transparent;background:var(--field);padding:0 14px;outline:0}
 .field:focus{border-color:var(--acc);background:#fff}
+input[type=date].field{display:block;min-width:0;max-width:100%;-webkit-appearance:none;appearance:none;text-align:left;line-height:50px;overflow:hidden}
+input[type=date].field::-webkit-date-and-time-value{text-align:left;min-width:0}
+input[type=date].field::-webkit-calendar-picker-indicator{margin-left:auto}
+.iconbtn svg{width:20px;height:20px}
 .err{color:var(--over);font-size:13px;min-height:18px}
 .dots{display:flex;gap:14px;margin:6px 0}.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);display:block}.dots i.on{background:var(--ink)}
 .pad{display:grid;grid-template-columns:repeat(3,72px);gap:14px 22px;margin-top:10px}

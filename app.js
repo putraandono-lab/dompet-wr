@@ -30,6 +30,7 @@
     plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
     target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>',
     back: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>',
+    power: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v8M6.4 6.6a8 8 0 1 0 11.2 0"/></svg>',
     sync: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 11a8 8 0 0 0-14-4M4 4v4h4M4 13a8 8 0 0 0 14 4M20 20v-4h-4"/></svg>',
     logo: '<svg viewBox="0 0 40 40"><rect x="4" y="9" width="32" height="24" rx="6" fill="#F4F1FA"/><rect x="21" y="17" width="15" height="8" rx="4" fill="#241F3A"/><circle cx="26" cy="21" r="2.6" fill="#5B84C4"/><circle cx="31.5" cy="21" r="2.6" fill="#9C4A5F"/><rect x="8" y="5" width="22" height="5" rx="2.5" fill="#B9C7E4"/></svg>'
   };
@@ -171,8 +172,8 @@
   function navItems() { return [['beranda', 'Beranda', 'home'], ['riwayat', 'Riwayat', 'list'], ['laporan', 'Laporan', 'chart'], ['anggaran', 'Anggaran', 'target'], ['akun', 'Akun', 'user']]; }
   function shell(inner) {
     var r = S.route, tab = ['catat', 'dompet-baru'].indexOf(r) >= 0 ? null : r;
-    var side = '<aside class="side"><div class="brand"><div class="logo">' + ICON.logo + '</div>Dompet WR</div>' + navItems().map(function (n) { return '<button class="nv ' + (tab === n[0] ? 'on' : '') + '" data-go="' + n[0] + '">' + ICON[n[2]] + n[1] + '</button>'; }).join('') + '<div class="sp"></div><div class="sync"></div><button class="btn acc" data-go="catat">' + ICON.plus.replace('<svg', '<svg width="18" height="18"') + ' Catat transaksi</button></aside>';
-    var top = '<div class="top"><div class="brand"><div class="logo">' + ICON.logo + '</div>Dompet WR</div><span class="sync"></span><span class="pill">Dompet ' + esc(S.me.peran) + '</span><button class="iconbtn" data-act="sync" aria-label="Sinkron">' + ICON.sync + '</button></div>';
+    var side = '<aside class="side"><div class="brand"><div class="logo">' + ICON.logo + '</div>Dompet WR</div>' + navItems().map(function (n) { return '<button class="nv ' + (tab === n[0] ? 'on' : '') + '" data-go="' + n[0] + '">' + ICON[n[2]] + n[1] + '</button>'; }).join('') + '<div class="sp"></div><div class="sync"></div><button class="nv" data-act="quit-app">' + ICON.power + 'Keluar</button><button class="btn acc" data-go="catat">' + ICON.plus.replace('<svg', '<svg width="18" height="18"') + ' Catat transaksi</button></aside>';
+    var top = '<div class="top"><div class="brand"><div class="logo">' + ICON.logo + '</div>Dompet WR</div><span class="sync"></span><span class="pill">Dompet ' + esc(S.me.peran) + '</span><button class="iconbtn" data-act="sync" aria-label="Sinkron">' + ICON.sync + '</button><button class="iconbtn" data-act="quit-app" aria-label="Keluar aplikasi">' + ICON.power + '</button></div>';
     var tabs = '<nav class="tabbar">' +
       '<button class="' + (tab === 'beranda' ? 'on' : '') + '" data-go="beranda">' + ICON.home + 'Beranda</button>' +
       '<button class="' + (tab === 'riwayat' ? 'on' : '') + '" data-go="riwayat">' + ICON.list + 'Riwayat</button>' +
@@ -430,6 +431,7 @@
       case 'use-pin': case 'change-pin': S.screen = 'pinsetup'; S.pin = { step: 1, val: '', first: '', msg: '' }; render(); break;
       case 'skip-pin': store.set('wr.session', S.token); finishAuth(); break;
       case 'lock-now': lockNow(); break;
+      case 'quit-app': if (store.get('wr.lock')) lockNow(); else { toast('Buat PIN dulu agar aplikasi bisa dikunci'); nav('akun'); } break;
       case 'bio-toggle':
         if (store.get('wr.bio')) { store.del('wr.bio'); render(); } else bioRegister().then(function () { toast('Face ID aktif'); render(); }, function () { toast('Face ID tidak bisa diaktifkan'); }); break;
       case 'bio': bioVerify().then(function (tok) { S.token = tok; finishAuth(); }, function () { S.lockMsg = 'Face ID gagal, pakai PIN.'; render(); }); break;
