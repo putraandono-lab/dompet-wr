@@ -7,7 +7,7 @@
 
   var MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   var MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-  var EXP_CATS = ['Makan', 'Transport', 'Tagihan', 'Belanja', 'Hiburan', 'Lainnya'];
+  var EXP_CATS = ['Makan', 'Transport', 'Tagihan', 'Belanja', 'Hiburan', 'Online', 'QRIS', 'Lainnya'];
   var INC_CATS = ['Gaji', 'Bonus', 'Usaha', 'Hadiah', 'Investasi', 'Lainnya'];
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
